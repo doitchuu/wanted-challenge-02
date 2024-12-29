@@ -1,5 +1,5 @@
-function TodoListPage () {
-    return <div>TodoListPage</div>
+function TodoListPage() {
+  return <div>TodoListPage</div>;
 }
 
 export default TodoListPage;
