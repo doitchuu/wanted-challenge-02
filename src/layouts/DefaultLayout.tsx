@@ -5,7 +5,8 @@ function DefaultLayout() {
     <div>
       <header>
         <Link to="/">Logo</Link>
-        <Link to="/auth">Login / SignIn</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/signin">SignIn</Link>
       </header>
       <main>
         <Outlet />
