@@ -5,7 +5,6 @@ function ProtectedLayout() {
     <div>
       <header>
         <Link to="/">Logo</Link>
-        <Link to="/auth">Login / SignIn</Link>
       </header>
       <main>
         <Outlet />
