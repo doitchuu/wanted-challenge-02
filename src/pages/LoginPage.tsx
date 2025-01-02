@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import Input from "../components/Input";
 
-import validateField from "../utils/validateField";
+import { validateField } from "../utils/validation";
 
 function LoginPage() {
   const [form, setForm] = useState<{ email: string; password: string }>({
@@ -30,7 +30,7 @@ function LoginPage() {
     ev.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8080/auth", {
+      const response = await fetch("http://localhost:8080/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function LoginPage() {
       });
 
       if (!response.ok) {
-        return;
+        throw new Error("로그인에 실패했어요.");
       }
 
       const result = await response.json();
