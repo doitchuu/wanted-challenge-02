@@ -3,79 +3,27 @@ import { useNavigate } from "react-router-dom";
 
 import Input from "../components/Input";
 
-const PASSWORD_MIN_LENGTH = 8;
+import validateField from "../utils/validateField";
 
 function LoginPage() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [formValid, setFormValid] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState({
+  const [form, setForm] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
+  });
+  const [errorMessage, setErrorMessage] = useState({
+    email: "이메일을 입력해주세요.",
+    password: "비밀번호를 입력해주세요",
   });
 
   const navigate = useNavigate();
 
   function handleChange(ev: React.ChangeEvent<HTMLInputElement>) {
     const { id, value } = ev.currentTarget;
-    let isValidValues = false;
 
-    if (id === "email") {
-      setEmail(value);
-      isValidValues = validateEmail(value) && validatePassword(password);
-    } else {
-      setPassword(value);
-      isValidValues = validateEmail(email) && validatePassword(value);
-    }
+    setForm({ ...form, [id]: value });
+    setErrorMessage(validateField(id, value, errorMessage));
 
-    setFormValid(isValidValues);
     return;
-  }
-
-  function validateEmail(email: string) {
-    const trimmedEmail = email.trim();
-
-    if (!trimmedEmail) {
-      setErrorMessage({
-        ...errorMessage,
-        email: "이메일을 입력해주세요.",
-      });
-
-      return false;
-    }
-
-    if (!trimmedEmail.includes("@") || !trimmedEmail.includes(".")) {
-      setErrorMessage({
-        ...errorMessage,
-        email: "잘못된 이메일 형식입니다. 다시 입력해주세요.",
-      });
-
-      return false;
-    }
-
-    return true;
-  }
-
-  function validatePassword(password: string) {
-    if (!password) {
-      setErrorMessage({
-        ...errorMessage,
-        password: "비밀번호를 입력해주세요.",
-      });
-
-      return false;
-    }
-
-    if (password.length < PASSWORD_MIN_LENGTH) {
-      setErrorMessage({
-        ...errorMessage,
-        password: "비밀번호는 8자 이상이어야 합니다.",
-      });
-
-      return false;
-    }
-
-    return true;
   }
 
   async function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
@@ -87,7 +35,7 @@ function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(form),
       });
 
       if (!response.ok) {
@@ -108,9 +56,9 @@ function LoginPage() {
       <h1>로그인</h1>
       <Input
         id="email"
-        type="e"
+        type="text"
         label="이메일 주소"
-        value={email}
+        value={form.email}
         onChange={handleChange}
         placeholder="이메일 주소 입력"
         errorMessage={errorMessage.email}
@@ -119,12 +67,15 @@ function LoginPage() {
         id="password"
         type="password"
         label="비밀번호"
-        value={password}
+        value={form.password}
         onChange={handleChange}
-        placeholder="이메일 주소 입력"
+        placeholder="비밀번호 입력"
         errorMessage={errorMessage.password}
       />
-      <button type="submit" disabled={!formValid}>
+      <button
+        type="submit"
+        disabled={!!errorMessage.email || !!errorMessage.password}
+      >
         로그인
       </button>
     </form>
