@@ -1,6 +1,16 @@
 const PASSWORD_MIN_LENGTH = 8;
 
-function validateField(
+export function validatePasswordConfirm(
+  password: string,
+  passwordConfirm: string
+): string {
+  if (password !== passwordConfirm) {
+    return "비밀번호가 일치하지 않습니다.";
+  }
+  return "";
+}
+
+export function validateField(
   type: string,
   value: string,
   message: { email: string; password: string }
@@ -32,5 +42,3 @@ function validateField(
 
   return errorMessage;
 }
-
-export default validateField;
