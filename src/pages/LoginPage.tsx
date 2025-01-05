@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Input from "../components/Input";
@@ -50,6 +50,13 @@ function LoginPage() {
       console.error(error, "로그인 중 에러가 발생했어요.");
     }
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   return (
     <form onSubmit={handleSubmit}>
