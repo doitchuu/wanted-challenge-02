@@ -55,7 +55,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (token) {
-      navigate("/todo");
+      navigate("/");
     }
   }, [token, navigate]);
 
