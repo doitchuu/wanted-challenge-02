@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
 import Input from "../components/Input";
 
 import { validateField } from "../utils/validation";
 
 function LoginPage() {
+  const { token, setToken } = useContext(AuthContext);
+
   const [form, setForm] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
@@ -44,12 +46,18 @@ function LoginPage() {
 
       const result = await response.json();
 
-      localStorage.setItem("token", result.token);
+      setToken(result.token);
       navigate("/");
     } catch (error) {
       console.error(error, "로그인 중 에러가 발생했어요.");
     }
   }
+
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   return (
     <form onSubmit={handleSubmit}>
