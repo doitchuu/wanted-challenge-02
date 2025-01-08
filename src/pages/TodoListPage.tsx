@@ -17,17 +17,27 @@ function TodoListPage() {
   const { id } = useParams();
 
   const [form, setForm] = useState({ title: "", content: "" });
+  const [editForm, setEditForm] = useState({ title: "", content: "" });
   const [todos, setTodos] = useState<Todo[]>([]);
+
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = ev.currentTarget;
+
+    if (isEditing) {
+      setEditForm((prev) => ({ ...prev, [id]: value }));
+      return;
+    }
+
     setForm((prev) => ({ ...prev, [id]: value }));
   };
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
 
     async function fetchTodos() {
       try {
@@ -52,6 +62,7 @@ function TodoListPage() {
   useEffect(() => {
     if (!id || !token) {
       setSelectedTodo(null);
+
       return;
     }
 
@@ -67,7 +78,8 @@ function TodoListPage() {
 
         const result = await response.json();
         setSelectedTodo(result.data);
-        setForm({ title: result.data.title, content: result.data.content });
+        setEditForm({ title: result.data.title, content: result.data.content });
+        setForm({ title: "", content: "" });
       } catch (error) {
         console.error(error, "상세 정보를 불러오던 중 에러가 발생했어요.");
       }
@@ -91,9 +103,7 @@ function TodoListPage() {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) {
-        throw new Error("할일을 추가하는 데 실패했어요.");
-      }
+      if (!response.ok) throw new Error("할일을 추가하는 데 실패했어요.");
 
       const result = await response.json();
       setTodos((prev) => [...prev, result.data]);
@@ -104,7 +114,9 @@ function TodoListPage() {
   };
 
   const handleUpdateTodo = async () => {
-    if (!selectedTodo) return;
+    if (!selectedTodo) {
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -115,16 +127,13 @@ function TodoListPage() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(form),
+          body: JSON.stringify(editForm),
         }
       );
 
-      if (!response.ok) {
-        throw new Error("할일을 수정하는 데 실패했어요.");
-      }
+      if (!response.ok) throw new Error("할일을 수정하는 데 실패했어요.");
 
       const result = await response.json();
-
       setTodos((prev) =>
         prev.map((todo) => (todo.id === selectedTodo.id ? result.data : todo))
       );
@@ -217,7 +226,7 @@ function TodoListPage() {
                   id="title"
                   type="text"
                   label="타이틀"
-                  value={form.title}
+                  value={editForm.title}
                   onChange={handleChange}
                   placeholder="할 일 제목"
                 />
@@ -225,7 +234,7 @@ function TodoListPage() {
                   id="content"
                   type="text"
                   label="내용"
-                  value={form.content}
+                  value={editForm.content}
                   onChange={handleChange}
                   placeholder="상세 내용"
                 />
