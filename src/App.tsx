@@ -7,7 +7,6 @@ import MainPage from "./pages/MainPage";
 import LoginPage from "./pages/LoginPage";
 import SignInPage from "./pages/SignInPage";
 import TodoListPage from "./pages/TodoListPage";
-import TodoDetailPage from "./pages/TodoDetailPage";
 
 function App() {
   return (
@@ -20,7 +19,6 @@ function App() {
 
       <Route element={<ProtectedLayout />}>
         <Route path="/todo" element={<TodoListPage />} />
-        <Route path="/todo/:id" element={<TodoDetailPage />} />
       </Route>
     </Routes>
   );
