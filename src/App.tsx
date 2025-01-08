@@ -19,6 +19,7 @@ function App() {
 
       <Route element={<ProtectedLayout />}>
         <Route path="/todo" element={<TodoListPage />} />
+        <Route path="/todo/:id" element={<TodoListPage />} />
       </Route>
     </Routes>
   );
