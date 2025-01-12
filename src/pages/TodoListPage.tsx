@@ -1,15 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import Input from "../components/Input";
 
-interface Todo {
-  title: string;
-  content: string;
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Todo } from "../types/todo";
+import TodoList from "../components/todo/List";
+import TodoDetail from "../components/todo/Detail";
 
 function TodoListPage() {
   const { token } = useContext(AuthContext);
@@ -168,112 +163,23 @@ function TodoListPage() {
 
   return (
     <div className="flex gap-6 p-4">
-      {/* Todo List */}
-      <div className="flex-1 bg-gray-100 p-4 rounded-lg">
-        <h1 className="text-xl font-bold mb-4">Todo 목록</h1>
-        <ul className="mb-4">
-          {todos.map((todo) => (
-            <li
-              key={todo.id}
-              onClick={() => navigate(`/todo/${todo.id}`)}
-              className={`cursor-pointer py-2 px-3 rounded-md hover:bg-gray-200 ${
-                selectedTodo?.id === todo.id ? "bg-gray-300" : ""
-              }`}
-            >
-              {todo.title}
-            </li>
-          ))}
-        </ul>
-        <Input
-          id="title"
-          type="text"
-          label="타이틀"
-          value={form.title}
-          onChange={handleChange}
-          placeholder="할 일 제목"
-        />
-        <Input
-          id="content"
-          type="text"
-          label="내용"
-          value={form.content}
-          onChange={handleChange}
-          placeholder="상세 내용"
-        />
-        <button
-          onClick={handleAddTodo}
-          className="mt-4 w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
-        >
-          + 할 일 추가
-        </button>
-      </div>
-
-      {/* Todo Details */}
-      <div className="flex-2 bg-white p-4 rounded-lg shadow">
-        {selectedTodo ? (
-          <div>
-            <h3 className="text-lg font-bold">{selectedTodo.title}</h3>
-            <p className="text-gray-700">{selectedTodo.content}</p>
-            <p className="text-sm text-gray-500 mt-2">
-              생성일: {new Date(selectedTodo.createdAt).toLocaleString()}
-            </p>
-            <p className="text-sm text-gray-500">
-              수정일: {new Date(selectedTodo.updatedAt).toLocaleString()}
-            </p>
-            {isEditing ? (
-              <div className="mt-4">
-                <Input
-                  id="title"
-                  type="text"
-                  label="타이틀"
-                  value={editForm.title}
-                  onChange={handleChange}
-                  placeholder="할 일 제목"
-                />
-                <Input
-                  id="content"
-                  type="text"
-                  label="내용"
-                  value={editForm.content}
-                  onChange={handleChange}
-                  placeholder="상세 내용"
-                />
-                <div className="mt-4 flex gap-2">
-                  <button
-                    onClick={handleUpdateTodo}
-                    className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
-                  >
-                    저장
-                  </button>
-                  <button
-                    onClick={() => setIsEditing(false)}
-                    className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
-                  >
-                    취소
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="mt-4 flex gap-2">
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600"
-                >
-                  수정
-                </button>
-                <button
-                  onClick={handleDeleteTodo}
-                  className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
-                >
-                  삭제
-                </button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <p className="text-gray-700">할 일을 선택하세요.</p>
-        )}
-      </div>
+      <TodoList
+        todos={todos}
+        selectedTodo={selectedTodo}
+        form={form}
+        navigate={navigate}
+        handleChange={handleChange}
+        handleAddTodo={handleAddTodo}
+      />
+      <TodoDetail
+        selectedTodo={selectedTodo}
+        isEditing={isEditing}
+        editForm={editForm}
+        handleChange={handleChange}
+        handleUpdateTodo={handleUpdateTodo}
+        handleDeleteTodo={handleDeleteTodo}
+        setIsEditing={setIsEditing}
+      />
     </div>
   );
 }
