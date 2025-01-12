@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import DefaultLayout from "./layouts/DefaultLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
@@ -21,6 +21,7 @@ function App() {
         <Route path="/todo" element={<TodoListPage />} />
         <Route path="/todo/:id" element={<TodoListPage />} />
       </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
