@@ -1,13 +1,18 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 import { Todo } from "../types/todo";
 import TodoList from "../components/todo/List";
 import TodoDetail from "../components/todo/Detail";
+import {
+  deleteTodo,
+  getTodoById,
+  getTodos,
+  addTodo,
+  updateTodo,
+} from "../apis/todo";
 
 function TodoListPage() {
-  const { token } = useContext(AuthContext);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -30,110 +35,61 @@ function TodoListPage() {
   };
 
   useEffect(() => {
-    if (!token) {
-      return;
-    }
-
     async function fetchTodos() {
       try {
-        const response = await fetch("http://localhost:8080/todos", {
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (!response.ok)
-          throw new Error("할일 목록을 불러오는 데 실패했어요.");
-
-        const result = await response.json();
-        setTodos(result.data);
+        const data = await getTodos();
+        if (data) setTodos(data);
       } catch (error) {
         console.error(error, "목록을 불러오던 중 에러가 발생했어요.");
       }
     }
 
     fetchTodos();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
-    if (!id || !token) {
-      setSelectedTodo(null);
-
-      return;
-    }
-
-    async function fetchTodoById() {
+    async function fetchTodo() {
       try {
-        const response = await fetch(`http://localhost:8080/todos/${id}`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const data = id ? await getTodoById(id) : null;
 
-        if (!response.ok)
-          throw new Error("할일 상세 정보를 가져오는 데 실패했어요.");
+        if (data) {
+          setSelectedTodo(data);
+          setEditForm({ title: data.title, content: data.content });
+          setForm({ title: "", content: "" });
 
-        const result = await response.json();
-        setSelectedTodo(result.data);
-        setEditForm({ title: result.data.title, content: result.data.content });
-        setForm({ title: "", content: "" });
+          return;
+        }
       } catch (error) {
         console.error(error, "상세 정보를 불러오던 중 에러가 발생했어요.");
       }
     }
-
-    fetchTodoById();
-  }, [id, token]);
+    fetchTodo();
+  }, [id]);
 
   const handleAddTodo = async () => {
-    if (!form.title || !form.content) {
-      return;
-    }
-
+    if (!form.title || !form.content) return;
     try {
-      const response = await fetch("http://localhost:8080/todos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
-
-      if (!response.ok) throw new Error("할일을 추가하는 데 실패했어요.");
-
-      const result = await response.json();
-      setTodos((prev) => [...prev, result.data]);
-      setForm({ title: "", content: "" });
+      const newTodo = await addTodo(form);
+      if (newTodo) {
+        setTodos((prev) => [...prev, newTodo]);
+        setForm({ title: "", content: "" });
+      }
     } catch (error) {
       console.error(error, "할일 추가 중 에러가 발생했어요.");
     }
   };
 
   const handleUpdateTodo = async () => {
-    if (!selectedTodo) {
-      return;
-    }
-
+    if (!selectedTodo) return;
     try {
-      const response = await fetch(
-        `http://localhost:8080/todos/${selectedTodo.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(editForm),
-        }
-      );
-
-      if (!response.ok) throw new Error("할일을 수정하는 데 실패했어요.");
-
-      const result = await response.json();
-      setTodos((prev) =>
-        prev.map((todo) => (todo.id === selectedTodo.id ? result.data : todo))
-      );
-      setSelectedTodo(result.data);
-      setIsEditing(false);
+      const updated = await updateTodo(selectedTodo.id, editForm);
+      if (updated) {
+        setTodos((prev) =>
+          prev.map((todo) => (todo.id === selectedTodo.id ? updated : todo))
+        );
+        setSelectedTodo(updated);
+        setIsEditing(false);
+      }
     } catch (error) {
       console.error(error, "할일을 수정하던 중 에러가 발생했어요.");
     }
@@ -141,18 +97,8 @@ function TodoListPage() {
 
   const handleDeleteTodo = async () => {
     if (!selectedTodo) return;
-
     try {
-      const response = await fetch(
-        `http://localhost:8080/todos/${selectedTodo.id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      if (!response.ok) throw new Error("할일을 삭제하는 데 실패했어요.");
-
+      await deleteTodo(selectedTodo.id);
       setTodos((prev) => prev.filter((todo) => todo.id !== selectedTodo.id));
       setSelectedTodo(null);
       navigate("/todo");

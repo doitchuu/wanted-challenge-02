@@ -1,17 +1,17 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate, Outlet, Link } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 
 function ProtectedLayout() {
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     if (!token) {
       alert("로그인이 필요해요. 로그인 후에 이용해주세요 🥲");
       navigate("/login");
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   return (
     <div>

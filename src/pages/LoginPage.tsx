@@ -1,13 +1,11 @@
-import { useState, useContext, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import Input from "../components/Input";
+import { login } from "../apis/auth";
 
 import { validateField } from "../utils/validation";
 
 function LoginPage() {
-  const { token, setToken } = useContext(AuthContext);
-
   const [form, setForm] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
@@ -30,34 +28,18 @@ function LoginPage() {
 
   async function handleSubmit(ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-
     try {
-      const response = await fetch("http://localhost:8080/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const result = await login(form);
 
-      if (!response.ok) {
-        throw new Error("로그인에 실패했어요.");
+      if (!result) {
+        throw new Error("로그인 실패");
       }
 
-      const result = await response.json();
-
-      setToken(result.token);
-      navigate("/");
+      navigate("/todo");
     } catch (error) {
       console.error(error, "로그인 중 에러가 발생했어요.");
     }
   }
-
-  useEffect(() => {
-    if (token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
 
   return (
     <form onSubmit={handleSubmit}>
