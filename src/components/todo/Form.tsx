@@ -1,4 +1,4 @@
-import Input from "../Input";
+import Input from "../../shared/Input";
 
 interface FormProps {
   form: { title: string; content: string };

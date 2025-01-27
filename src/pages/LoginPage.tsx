@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../components/Input";
+import Input from "../shared/Input";
 import { login } from "../apis/auth";
 
 import { validateField } from "../utils/validation";
