@@ -18,10 +18,10 @@ function Input({
   errorMessage,
 }: InputProps) {
   return (
-    <div className="mb-4">
+    <div className="flex flex-col">
       <label
         htmlFor={id}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="mb-4 text-sm font-medium text-gray-900 after:content-['*'] after:ml-1 after:text-red-500"
       >
         {label}
       </label>
@@ -31,14 +31,14 @@ function Input({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full rounded-md border ${
+        className={`w-full h-12 px-4 py-2 rounded-md border ${
           errorMessage
             ? "border-red-500 focus:ring-red-500 focus:border-red-500"
             : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-        } px-3 py-2 text-sm shadow-sm focus:outline-none`}
+        } text-sm focus:outline-none`}
       />
       {errorMessage && (
-        <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
+        <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
       )}
     </div>
   );
