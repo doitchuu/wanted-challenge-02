@@ -18,10 +18,10 @@ function Input({
   errorMessage,
 }: InputProps) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mb-4">
       <label
         htmlFor={id}
-        className="mb-4 text-sm font-medium text-gray-900 after:content-['*'] after:ml-1 after:text-red-500"
+        className="mb-2 text-sm font-medium text-gray-900 after:content-['*'] after:ml-1 after:text-red-500"
       >
         {label}
       </label>
