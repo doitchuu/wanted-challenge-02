@@ -15,9 +15,11 @@ function ProtectedLayout() {
 
   return (
     <div>
-      <header>
-        <Link to="/">Logo</Link>
-        <Link to="/todo">Todo</Link>
+      <header className="flex justify-between items-center p-4 bg-white border-b-1 border-slate-200 text-slate-800 font-medium text-sm">
+        <Link to="/">TodoList</Link>
+        <div className="flex space-x-4">
+          <Link to="/todo">목록</Link>
+        </div>
       </header>
       <main>
         <Outlet />
