@@ -69,6 +69,7 @@ function LoginPage() {
       <Button
         type="submit"
         disabled={!!errorMessage.email || !!errorMessage.password}
+        className="w-full"
       >
         로그인
       </Button>

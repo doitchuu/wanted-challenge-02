@@ -97,6 +97,7 @@ function SignInPage() {
           !!errorMessage.password ||
           !!passwordConfirmError
         }
+        className="w-full"
       >
         회원가입
       </Button>

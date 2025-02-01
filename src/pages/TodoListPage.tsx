@@ -108,7 +108,7 @@ function TodoListPage() {
   };
 
   return (
-    <div className="flex gap-6 p-4">
+    <div className="flex flex-row size-full">
       <TodoList
         todos={todos}
         selectedTodo={selectedTodo}
