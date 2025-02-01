@@ -4,6 +4,7 @@ import Input from "../shared/Input";
 import { login } from "../apis/auth";
 
 import { validateField } from "../utils/validation";
+import Button from "../shared/Button";
 
 function LoginPage() {
   const [form, setForm] = useState<{ email: string; password: string }>({
@@ -42,8 +43,11 @@ function LoginPage() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>로그인</h1>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h1 className="mt-4 text-2xl font-bold">로그인</h1>
+      <p className="mt-2 mb-8 text-sm text-slate-600">
+        Todolist 서비스 사용을 위해 로그인 해주세요.
+      </p>
       <Input
         id="email"
         type="text"
@@ -62,12 +66,12 @@ function LoginPage() {
         placeholder="비밀번호 입력"
         errorMessage={errorMessage.password}
       />
-      <button
+      <Button
         type="submit"
         disabled={!!errorMessage.email || !!errorMessage.password}
       >
         로그인
-      </button>
+      </Button>
     </form>
   );
 }

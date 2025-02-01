@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { validatePasswordConfirm, validateField } from "../utils/validation";
 
 import Input from "../shared/Input";
+import Button from "../shared/Button";
 
-const SignInPage = () => {
+function SignInPage() {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -57,8 +58,11 @@ const SignInPage = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>회원가입</h1>
+    <form onSubmit={handleSubmit} className="p-4">
+      <h1 className="mt-4 text-2xl font-bold">회원가입</h1>
+      <p className="mt-2 mb-8 text-sm text-slate-600">
+        Todolist 서비스 사용을 위해 회원가입 해주세요.
+      </p>
       <Input
         id="email"
         type="text"
@@ -86,7 +90,7 @@ const SignInPage = () => {
         placeholder="비밀번호 재입력"
         errorMessage={passwordConfirmError}
       />
-      <button
+      <Button
         type="submit"
         disabled={
           !!errorMessage.email ||
@@ -95,9 +99,9 @@ const SignInPage = () => {
         }
       >
         회원가입
-      </button>
+      </Button>
     </form>
   );
-};
+}
 
 export default SignInPage;
