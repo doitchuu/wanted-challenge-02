@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 interface InputProps {
   id: string;
   type: string;
@@ -31,11 +33,15 @@ function Input({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full h-12 px-4 py-2 rounded-md border ${
-          errorMessage
-            ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-            : "border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-        } text-sm focus:outline-none`}
+        className={clsx(
+          "w-full h-12 px-4 py-2 rounded-md border text-sm focus:outline-none",
+          {
+            "border-red-500 focus:ring-red-500 focus:border-red-500":
+              errorMessage,
+            "border-gray-300 focus:ring-blue-500 focus:border-blue-500":
+              !errorMessage,
+          }
+        )}
       />
       {errorMessage && (
         <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
