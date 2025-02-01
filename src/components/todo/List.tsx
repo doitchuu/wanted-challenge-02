@@ -19,15 +19,15 @@ function TodoList({
   handleAddTodo,
 }: TodoListProps) {
   return (
-    <div className="flex-1 bg-gray-100 p-4 rounded-lg">
+    <div className="flex-1 w-1/2 h-screen bg-slate-100 p-4 rounded-lg">
       <h1 className="text-xl font-bold mb-4">Todo 목록</h1>
       <ul className="mb-4">
         {todos.map((todo: Todo) => (
           <li
             key={todo.id}
             onClick={() => navigate(`/todo/${todo.id}`)}
-            className={`cursor-pointer py-2 px-3 rounded-md hover:bg-gray-200 ${
-              selectedTodo?.id === todo.id ? "bg-gray-300" : ""
+            className={`cursor-pointer py-2 px-3 rounded-md hover:bg-slate-200 ${
+              selectedTodo?.id === todo.id ? "bg-slate-300" : ""
             }`}
           >
             {todo.title}

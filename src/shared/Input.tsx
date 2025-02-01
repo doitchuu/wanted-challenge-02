@@ -23,7 +23,7 @@ function Input({
     <div className="flex flex-col mb-4">
       <label
         htmlFor={id}
-        className="mb-2 text-sm font-medium text-gray-900 after:content-['*'] after:ml-1 after:text-red-500"
+        className="mb-2 text-sm font-medium text-slate-900 after:content-['*'] after:ml-1 after:text-red-500"
       >
         {label}
       </label>
@@ -38,7 +38,7 @@ function Input({
           {
             "border-red-500 focus:ring-red-500 focus:border-red-500":
               errorMessage,
-            "border-gray-300 focus:ring-blue-500 focus:border-blue-500":
+            "border-slate-300 focus:ring-blue-500 focus:border-blue-500":
               !errorMessage,
           }
         )}
