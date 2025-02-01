@@ -1,5 +1,5 @@
 import Input from "../../shared/Input";
-
+import Button from "../../shared/Button";
 interface FormProps {
   form: { title: string; content: string };
   isSecondaryButton?: boolean;
@@ -36,19 +36,17 @@ function TodoForm({
         placeholder="상세 내용"
       />
       <div className="mt-4 flex gap-2">
-        <button
-          onClick={handleUpdateTodo}
-          className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600"
-        >
+        <Button type="button" onClick={handleUpdateTodo} className="w-full">
           저장
-        </button>
+        </Button>
         {isSecondaryButton && (
-          <button
+          <Button
+            type="button"
             onClick={handleButtonClick}
-            className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+            className="bg-slate-400 py-2 px-4 w-full text-white hover:bg-slate-500"
           >
             {secondaryButtonName}
-          </button>
+          </Button>
         )}
       </div>
     </div>

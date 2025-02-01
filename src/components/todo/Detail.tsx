@@ -1,3 +1,4 @@
+import Button from "../../shared/Button";
 import { Todo } from "../../types/todo";
 import TodoForm from "./Form";
 
@@ -21,18 +22,22 @@ function TodoDetail({
   setIsEditing,
 }: TodoDetailProps) {
   if (!selectedTodo) {
-    return <p className="text-gray-700">할 일을 선택하세요.</p>;
+    return (
+      <div className="flex-1 flex items-center justify-center w-1/2 h-screen bg-white p-4 rounded-lg shadow">
+        <p className="text-slate-700 font-base">할 일을 선택하세요.</p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex-2 bg-white p-4 rounded-lg shadow">
+    <div className="flex-1 w-1/2 h-screen bg-white p-4 rounded-lg shadow">
       <div className="p-4 bg-slate-200 rounded-lg">
         <h3 className="text-lg font-bold">{selectedTodo.title}</h3>
-        <p className="text-gray-700">{selectedTodo.content}</p>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-slate-700">{selectedTodo.content}</p>
+        <p className="text-sm text-slate-500 mt-2">
           생성일: {new Date(selectedTodo.createdAt).toLocaleString()}
         </p>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-slate-500">
           수정일: {new Date(selectedTodo.updatedAt).toLocaleString()}
         </p>
       </div>
@@ -47,18 +52,20 @@ function TodoDetail({
         />
       ) : (
         <div className="mt-4 flex gap-2">
-          <button
+          <Button
+            type="button"
             onClick={() => setIsEditing(true)}
-            className="bg-yellow-500 text-white py-2 px-4 rounded-lg hover:bg-yellow-600"
+            className="bg-white border border-blue-500 !text-blue-600 w-full"
           >
             수정
-          </button>
-          <button
+          </Button>
+          <Button
+            type="button"
             onClick={handleDeleteTodo}
-            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600"
+            className="bg-red-500 w-full text-white py-2 px-4 rounded-lg hover:bg-red-600"
           >
             삭제
-          </button>
+          </Button>
         </div>
       )}
     </div>
